@@ -24,12 +24,20 @@ class PhoneBook {
     // find contact in contacts and make a call
   }
 
-  removeContact(contactId) {
-    // will remove contact from this.#contacts
+  removeContact(event) {
+    const isClickedOnRemove = event.target.closest('.btn-danger');
+
+    if (!isClickedOnRemove) return;
+
+    const contactElement = event.target.closest('.list-group-item');
+    const contactId = contactElement.getAttribute('data-user-id');
+
+    this.#contacts = this.#contacts.filter((contact) => contact.id.toString() !== contactId);
+
+    this.renderContacts();
   }
 
   search(event) {
-    // will search contact by: name, phone, email
     const searchValue = event.target.value.trim().toLowerCase();
 
     this.#searchedUsers =
@@ -48,8 +56,8 @@ class PhoneBook {
   }
 
   #setEvents() {
-    // will add event listeners to contact book
     this.#searchInputElement.addEventListener('input', this.search.bind(this));
+    this.#contactListElement.addEventListener('click', this.removeContact.bind(this));
   }
 
   renderContacts() {
