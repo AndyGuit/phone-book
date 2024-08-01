@@ -33,7 +33,16 @@ class PhoneBook {
     const searchValue = event.target.value.trim().toLowerCase();
 
     this.#searchedUsers =
-      searchValue.length > 0 ? this.#contacts.filter((user) => user.name.toLowerCase().includes(searchValue)) : [];
+      searchValue.length > 0
+        ? this.#contacts.filter((user) => {
+            const { name, email, website } = user;
+            const isName = name.toLowerCase().includes(searchValue);
+            const isEmail = email.toLowerCase().includes(searchValue);
+            const isWebsite = website.toLowerCase().includes(searchValue);
+
+            return isName || isEmail || isWebsite;
+          })
+        : [];
 
     this.renderContacts();
   }
