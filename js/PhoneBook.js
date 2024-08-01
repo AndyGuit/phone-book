@@ -3,6 +3,7 @@ class PhoneBook {
   #searchedUsers = null;
   #contactListElement = document.querySelector('.contacts__list');
   #searchInputElement = document.getElementById('contacts-search');
+  #callStatusModalElement = document.querySelector('.modal');
 
   constructor(users) {
     // validate users
@@ -20,8 +21,17 @@ class PhoneBook {
     this.#contacts.push(new User(user));
   }
 
-  call(contactId) {
+  #call(event) {
+    const contactId = event.relatedTarget.closest('.list-group-item').getAttribute('data-user-id');
+    const selectedContact = this.#contacts.find((contact) => contact.id.toString() === contactId);
+
+    this.#renderCallInfo(event.target, selectedContact);
     // find contact in contacts and make a call
+  }
+
+  #renderCallInfo(modalElement, selectedContact) {
+    const modalNameElement = modalElement.children[0].children[0].children[0].children[0];
+    modalNameElement.textContent = selectedContact.name;
   }
 
   #removeContact(event) {
@@ -58,6 +68,7 @@ class PhoneBook {
   #setEvents() {
     this.#searchInputElement.addEventListener('input', this.#search.bind(this));
     this.#contactListElement.addEventListener('click', this.#removeContact.bind(this));
+    this.#callStatusModalElement.addEventListener('shown.bs.modal', this.#call.bind(this));
   }
 
   #renderContacts() {
@@ -98,6 +109,8 @@ class PhoneBook {
     const buttonDeleteElement = document.createElement('button');
     const iconDeleteElement = document.createElement('i');
     buttonCallElement.classList.add('btn', 'btn-success');
+    buttonCallElement.setAttribute('data-bs-toggle', 'modal');
+    buttonCallElement.setAttribute('data-bs-target', '#callModal');
     iconCallElement.classList.add('bi', 'bi-telephone');
     buttonDeleteElement.classList.add('btn', 'btn-danger');
     iconDeleteElement.classList.add('bi', 'bi-trash');
