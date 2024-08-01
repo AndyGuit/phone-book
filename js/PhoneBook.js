@@ -13,7 +13,7 @@ class PhoneBook {
     });
 
     this.#setEvents();
-    this.renderContacts();
+    this.#renderContacts();
   }
 
   addContact(user) {
@@ -24,7 +24,7 @@ class PhoneBook {
     // find contact in contacts and make a call
   }
 
-  removeContact(event) {
+  #removeContact(event) {
     const isClickedOnRemove = event.target.closest('.btn-danger');
 
     if (!isClickedOnRemove) return;
@@ -34,10 +34,10 @@ class PhoneBook {
 
     this.#contacts = this.#contacts.filter((contact) => contact.id.toString() !== contactId);
 
-    this.renderContacts();
+    this.#renderContacts();
   }
 
-  search(event) {
+  #search(event) {
     const searchValue = event.target.value.trim().toLowerCase();
 
     this.#searchedUsers =
@@ -52,15 +52,15 @@ class PhoneBook {
           })
         : null;
 
-    this.renderContacts();
+    this.#renderContacts();
   }
 
   #setEvents() {
-    this.#searchInputElement.addEventListener('input', this.search.bind(this));
-    this.#contactListElement.addEventListener('click', this.removeContact.bind(this));
+    this.#searchInputElement.addEventListener('input', this.#search.bind(this));
+    this.#contactListElement.addEventListener('click', this.#removeContact.bind(this));
   }
 
-  renderContacts() {
+  #renderContacts() {
     this.#contactListElement.innerHTML = '';
 
     const listGroupElement = document.createElement('ul');
@@ -68,14 +68,14 @@ class PhoneBook {
 
     const contactsItems = this.#searchedUsers ? this.#searchedUsers : this.#contacts;
 
-    const contactsListItemsElements = contactsItems.map((contact) => this.createContactItem(contact));
+    const contactsListItemsElements = contactsItems.map((contact) => this.#createContactItem(contact));
 
     listGroupElement.append(...contactsListItemsElements);
 
     this.#contactListElement.append(listGroupElement);
   }
 
-  createContactItem(user) {
+  #createContactItem(user) {
     const liElement = document.createElement('li');
     liElement.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
     liElement.setAttribute('data-user-id', user.id);
