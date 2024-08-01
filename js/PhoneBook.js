@@ -1,6 +1,6 @@
 class PhoneBook {
   #contacts = [];
-  #searchedUsers = [];
+  #searchedUsers = null;
   #contactListElement = document.querySelector('.contacts__list');
   #searchInputElement = document.getElementById('contacts-search');
 
@@ -50,7 +50,7 @@ class PhoneBook {
 
             return isName || isEmail || isWebsite;
           })
-        : [];
+        : null;
 
     this.renderContacts();
   }
@@ -66,7 +66,7 @@ class PhoneBook {
     const listGroupElement = document.createElement('ul');
     listGroupElement.classList.add('list-group');
 
-    const contactsItems = this.#searchedUsers.length > 0 ? this.#searchedUsers : this.#contacts;
+    const contactsItems = this.#searchedUsers ? this.#searchedUsers : this.#contacts;
 
     const contactsListItemsElements = contactsItems.map((contact) => this.createContactItem(contact));
 
