@@ -50,9 +50,17 @@ class PhoneBook {
     liElement.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
     liElement.setAttribute('data-user-id', user.id);
 
+    const contactElementWrapper = document.createElement('div');
+    contactElementWrapper.classList.add('d-flex', 'flex-column');
+
     const nameElement = document.createElement('span');
-    nameElement.classList.add('contacts__contact');
+    nameElement.classList.add('contacts__contact', 'fw-bold');
     nameElement.textContent = user.name;
+
+    const emailElement = document.createElement('span');
+    emailElement.textContent = user.email;
+    const websiteElement = document.createElement('span');
+    websiteElement.textContent = user.website;
 
     const controlsElement = document.createElement('div');
     const buttonCallElement = document.createElement('button');
@@ -68,7 +76,9 @@ class PhoneBook {
 
     controlsElement.append(buttonCallElement, buttonDeleteElement);
 
-    liElement.append(nameElement, controlsElement);
+    contactElementWrapper.append(nameElement, emailElement, websiteElement);
+
+    liElement.append(contactElementWrapper, controlsElement);
 
     return liElement;
   }
