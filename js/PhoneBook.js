@@ -2,6 +2,7 @@ class PhoneBook {
   #contacts = [];
   #searchedUsers = [];
   #contactListElement = document.querySelector('.contacts__list');
+  #searchInputElement = document.getElementById('contacts-search');
 
   constructor(users) {
     // validate users
@@ -11,6 +12,7 @@ class PhoneBook {
       this.addContact(user);
     });
 
+    this.#setEvents();
     this.renderContacts();
   }
 
@@ -26,19 +28,30 @@ class PhoneBook {
     // will remove contact from this.#contacts
   }
 
-  search() {
+  search(event) {
     // will search contact by: name, phone, email
+    const searchValue = event.target.value.trim().toLowerCase();
+
+    this.#searchedUsers =
+      searchValue.length > 0 ? this.#contacts.filter((user) => user.name.toLowerCase().includes(searchValue)) : [];
+
+    this.renderContacts();
   }
 
   #setEvents() {
     // will add event listeners to contact book
+    this.#searchInputElement.addEventListener('input', this.search.bind(this));
   }
 
   renderContacts() {
+    this.#contactListElement.innerHTML = '';
+
     const listGroupElement = document.createElement('ul');
     listGroupElement.classList.add('list-group');
 
-    const contactsListItemsElements = this.#contacts.map((contact) => this.createContactItem(contact));
+    const contactsItems = this.#searchedUsers.length > 0 ? this.#searchedUsers : this.#contacts;
+
+    const contactsListItemsElements = contactsItems.map((contact) => this.createContactItem(contact));
 
     listGroupElement.append(...contactsListItemsElements);
 
