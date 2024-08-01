@@ -92,5 +92,3 @@ class Call {
     return randomNumber > 5 ? Call.CALL_STATUSES.rejected : Call.CALL_STATUSES.inProgress;
   }
 }
-
-const call = new Call('1111');

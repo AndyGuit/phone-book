@@ -1,6 +1,7 @@
 class PhoneBook {
   #contacts = [];
   #searchedUsers = null;
+
   #contactListElement = document.querySelector('.contacts__list');
   #searchInputElement = document.getElementById('contacts-search');
   #callStatusModalElement = document.querySelector('.modal');
@@ -31,7 +32,9 @@ class PhoneBook {
 
   #renderCallInfo(modalElement, selectedContact) {
     const modalNameElement = modalElement.children[0].children[0].children[0].children[0];
+    const modalPhoneElement = modalElement.children[0].children[0].children[0].children[1];
     modalNameElement.textContent = selectedContact.name;
+    modalPhoneElement.textContent = selectedContact.phone;
   }
 
   #removeContact(event) {
@@ -136,4 +139,3 @@ class PhoneBook {
 }
 
 const phoneBook = new PhoneBook(users);
-console.log(phoneBook.contacts);
