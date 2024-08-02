@@ -4,8 +4,8 @@ class PhoneBook {
 
   #contactListElement = document.querySelector('.contacts__list');
   #searchInputElement = document.getElementById('contacts-search');
-  #callStatusModalElement = document.querySelector('.modal');
-  #declineCallButton = this.#callStatusModalElement.children[0].children[0].children[2].children[0];
+  #callStatusModalElement = new bootstrap.Modal(document.querySelector('.modal'));
+  #declineCallButton = this.#callStatusModalElement._element.children[0].children[0].children[2].children[0];
 
   constructor(users) {
     users.forEach((user) => {
@@ -70,7 +70,7 @@ class PhoneBook {
   #setEvents() {
     this.#searchInputElement.addEventListener('input', this.#search.bind(this));
     this.#contactListElement.addEventListener('click', this.#removeContact.bind(this));
-    this.#callStatusModalElement.addEventListener('shown.bs.modal', this.#call.bind(this));
+    this.#callStatusModalElement._element.addEventListener('shown.bs.modal', this.#call.bind(this));
     this.#declineCallButton.addEventListener('click', this.#handleDeclineCall.bind(this));
 
     Call.addSubscription(Call.EVENT_TYPES.changeStatus, this.#handleChangeStatus.bind(this));
@@ -78,13 +78,19 @@ class PhoneBook {
   }
 
   #handleChangeStatus(newStatus) {
-    const statusElement = this.#callStatusModalElement.children[0].children[0].children[1].children[0];
+    const statusElement = this.#callStatusModalElement._element.children[0].children[0].children[1].children[0];
 
     statusElement.textContent = newStatus;
+
+    if (newStatus === Call.CALL_STATUSES.disconnected) {
+      const durationElement = this.#callStatusModalElement._element.children[0].children[0].children[1].children[1];
+      durationElement.textContent = '0:00';
+      this.#callStatusModalElement.hide();
+    }
   }
 
   #handleChangeDuration(duration) {
-    const durationElement = this.#callStatusModalElement.children[0].children[0].children[1].children[1];
+    const durationElement = this.#callStatusModalElement._element.children[0].children[0].children[1].children[1];
     durationElement.textContent = `0:${duration > 9 ? duration : '0' + duration}`;
   }
 
@@ -150,10 +156,6 @@ class PhoneBook {
   get contacts() {
     return this.#contacts;
   }
-
-  // your methods
-
-  // All event handlers should be a separate private methods
 }
 
 const phoneBook = new PhoneBook(users);
