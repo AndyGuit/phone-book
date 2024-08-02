@@ -5,6 +5,7 @@ class PhoneBook {
   #contactListElement = document.querySelector('.contacts__list');
   #searchInputElement = document.getElementById('contacts-search');
   #callStatusModalElement = document.querySelector('.modal');
+  #declineCallButton = this.#callStatusModalElement.children[0].children[0].children[2].children[0];
 
   constructor(users) {
     users.forEach((user) => {
@@ -70,6 +71,7 @@ class PhoneBook {
     this.#searchInputElement.addEventListener('input', this.#search.bind(this));
     this.#contactListElement.addEventListener('click', this.#removeContact.bind(this));
     this.#callStatusModalElement.addEventListener('shown.bs.modal', this.#call.bind(this));
+    this.#declineCallButton.addEventListener('click', this.#handleDeclineCall.bind(this));
 
     Call.addSubscription(Call.EVENT_TYPES.changeStatus, this.#handleChangeStatus.bind(this));
     Call.addSubscription(Call.EVENT_TYPES.changeDuration, this.#handleChangeDuration.bind(this));
@@ -99,6 +101,10 @@ class PhoneBook {
     listGroupElement.append(...contactsListItemsElements);
 
     this.#contactListElement.append(listGroupElement);
+  }
+
+  #handleDeclineCall() {
+    callController.endCall();
   }
 
   #createContactItem(user) {
