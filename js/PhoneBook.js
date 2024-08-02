@@ -7,9 +7,6 @@ class PhoneBook {
   #callStatusModalElement = document.querySelector('.modal');
 
   constructor(users) {
-    // validate users
-
-    // add users to contacts
     users.forEach((user) => {
       this.addContact(user);
     });
@@ -27,7 +24,9 @@ class PhoneBook {
     const selectedContact = this.#contacts.find((contact) => contact.id.toString() === contactId);
 
     this.#renderCallInfo(event.target, selectedContact);
-    // find contact in contacts and make a call
+
+    // new Call(selectedContact.phone);
+    callController.startCall(selectedContact);
   }
 
   #renderCallInfo(modalElement, selectedContact) {
