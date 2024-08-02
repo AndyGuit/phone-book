@@ -25,7 +25,6 @@ class PhoneBook {
 
     this.#renderCallInfo(event.target, selectedContact);
 
-    // new Call(selectedContact.phone);
     callController.startCall(selectedContact);
   }
 
@@ -71,6 +70,20 @@ class PhoneBook {
     this.#searchInputElement.addEventListener('input', this.#search.bind(this));
     this.#contactListElement.addEventListener('click', this.#removeContact.bind(this));
     this.#callStatusModalElement.addEventListener('shown.bs.modal', this.#call.bind(this));
+
+    Call.addSubscription(Call.EVENT_TYPES.changeStatus, this.#handleChangeStatus.bind(this));
+    Call.addSubscription(Call.EVENT_TYPES.changeDuration, this.#handleChangeDuration.bind(this));
+  }
+
+  #handleChangeStatus(newStatus) {
+    const statusElement = this.#callStatusModalElement.children[0].children[0].children[1].children[0];
+
+    statusElement.textContent = newStatus;
+  }
+
+  #handleChangeDuration(duration) {
+    const durationElement = this.#callStatusModalElement.children[0].children[0].children[1].children[1];
+    durationElement.textContent = `0:${duration > 9 ? duration : '0' + duration}`;
   }
 
   #renderContacts() {
